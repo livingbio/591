@@ -1,0 +1,17 @@
+<html>
+<head></head>
+<body>
+<table>
+{% for row in rows %}
+<tr>
+<td>{{ row.title }}</td>
+<td>{{ row.link }}</td>
+<td>{{ row.address }}</td>
+<td>{{ row.size }}</td>
+<td>{{ row.price }}</td>
+<td>{{ row.img }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
