@@ -55,6 +55,7 @@ def render(filename):
 def main():
     with open('results.csv', 'w') as ofile:
         writer = csv.DictWriter(ofile, ('title', 'link', 'address', 'size', 'price', 'img'))
+        writer.writeheader()
         for i in parse(6):
             writer.writerow(i)
         for i in parse(12):
