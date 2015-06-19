@@ -46,11 +46,13 @@ def parse(kind, offset=0):
             yield i
 
 def render(filename):
-    with open(filename) as ifile:
+    with open(filename,'r') as ifile, open('results.html', 'w') as ofile:
         reader = csv.DictReader(ifile)
+        rows = list(reader)
+        rows = [{k:v.decode('utf8') for k, v in row.items()} for row in rows]
 
-        template = jinja2.Template('591.html')
-        template.render({'rows': reader})
+        template = jinja2.Template(open('591.html').read())
+        ofile.write(template.render({'rows': rows}).encode('utf8'))
 
 def main():
     with open('results.csv', 'w') as ofile:
