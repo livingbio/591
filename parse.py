@@ -32,12 +32,12 @@ def parse(kind, offset=0):
 
         img = div.find('img')['src']
         yield {
-            'title': title,
-            'link': link,
-            'address': address,
-            'size': size,
-            'price': price,
-            'img': img
+            'title': title.encode('utf8'),
+            'link': link.encode('utf8'),
+            'address': address.encode('utf8'),
+            'size': size.encode('utf8'),
+            'price': price.encode('utf8'),
+            'img': img.encode('utf8')
         }
 
     time.sleep(5)
@@ -56,9 +56,9 @@ def main():
     with open('results.csv', 'w') as ofile:
         writer = csv.DictWriter(ofile, ('title', 'link', 'address', 'size', 'price', 'img'))
         for i in parse(6):
-            writer.writerow([k.encode('utf8') for k in i])
+            writer.writerow(i)
         for i in parse(12):
-            writer.writerow([k.encode('utf8') for k in i])
+            writer.writerow(i)
 
 if __name__ == '__main__':
     import clime; clime.start(debug=True)
