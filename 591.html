@@ -1,15 +1,15 @@
 <html>
 <head></head>
 <body>
+<h1>{{rows|length}}</h1>
 <table>
 {% for row in rows %}
 <tr>
-<td>{{ row.title }}</td>
-<td>{{ row.link }}</td>
+<td><a href="http://rent.591.com.tw/{{ row.link }}">{{ row.title }}</a></td>
 <td>{{ row.address }}</td>
 <td>{{ row.size }}</td>
 <td>{{ row.price }}</td>
-<td>{{ row.img }}</td>
+<td><img src="{{ img(row.img) }}"></td>
 </tr>
 {% endfor %}
 </table>

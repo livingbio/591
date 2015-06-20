@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import requests
 import logging
 import re
@@ -45,14 +47,40 @@ def parse(kind, offset=0):
         for i in parse(kind, offset+1):
             yield i
 
+
+def img(imgurl):
+    return imgurl.split("_")[0] + "_600x600.jpg"
+
 def render(filename):
     with open(filename,'r') as ifile, open('results.html', 'w') as ofile:
         reader = csv.DictReader(ifile)
+
         rows = list(reader)
-        rows = [{k:v.decode('utf8') for k, v in row.items()} for row in rows]
+        rows = [{
+            k:v.decode('utf8') for k, v in row.items()
+        } for row in rows]
+
+        new_rows = []
+        for row in rows:
+            size = float(row['size'].replace(u'坪',''))
+            price = int(row['price'].replace(u'元', '').replace(',',''))
+            if not 20 < size < 100: continue
+            if price > 40000: continue
+            if not any(k in row['address'] for k in (u'松山', u'信義', u'大安', u'中正', u'中山')): continue
+
+            if not u'捷運' in row['title'] or not u'捷運' in row['address']: continue
+
+            row['size'] = size
+            row['price'] = price
+            new_rows.append(row)
+
+        new_rows.sort(key=lambda i: i['price'] / i['size'])
 
         template = jinja2.Template(open('591.html').read())
-        ofile.write(template.render({'rows': rows}).encode('utf8'))
+        ofile.write(template.render({
+            'img': img,
+            'rows': new_rows
+        }).encode('utf8'))
 
 def main():
     with open('results.csv', 'w') as ofile:
